@@ -1,17 +1,77 @@
 'use client';
 
+import { useRef, useState, type ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSettings } from '@/hooks/useSettings';
 import { formatCHF } from '@/lib/calculations';
+import {
+  applyBackup,
+  buildBackup,
+  downloadBackupFile,
+  parseBackup,
+  BackupValidationError,
+} from '@/lib/backup';
 
 export default function SettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useSettings();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [importBusy, setImportBusy] = useState(false);
+
   const dailyNet = settings.dailyRate * settings.netRatio;
 
   const updateSetting = (key: keyof typeof settings, value: number) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleExport = () => {
+    try {
+      const backup = buildBackup();
+      downloadBackupFile(backup);
+    } catch (err) {
+      console.error('Export failed', err);
+      setImportError('Export failed. Please try again.');
+    }
+  };
+
+  const handleImportClick = () => {
+    setImportError(null);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    // Reset so selecting the same file again still fires onChange.
+    e.target.value = '';
+    if (!file) return;
+
+    setImportError(null);
+    setImportBusy(true);
+    try {
+      const text = await file.text();
+      const backup = parseBackup(text);
+      const confirmed = window.confirm(
+        'This will replace ALL existing Freelancer Radar data on this device with the contents of this backup. This cannot be undone.\n\nContinue?'
+      );
+      if (!confirmed) {
+        setImportBusy(false);
+        return;
+      }
+      applyBackup(backup);
+      // Hooks cache localStorage in React state; a full reload is the
+      // simplest way to pick up the restored values everywhere.
+      window.location.reload();
+    } catch (err) {
+      setImportBusy(false);
+      if (err instanceof BackupValidationError) {
+        setImportError(err.message);
+      } else {
+        console.error('Import failed', err);
+        setImportError('Could not read the selected file.');
+      }
+    }
   };
 
   return (
@@ -111,6 +171,48 @@ export default function SettingsPage() {
               saved automatically to your device.
             </p>
           </div>
+        </div>
+
+        {/* Data: Backup & Restore */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm">
+          <label className="block text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+            Data
+          </label>
+          <button
+            onClick={handleExport}
+            disabled={importBusy}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100"
+          >
+            <span>⬇️</span>
+            Export backup (JSON)
+          </button>
+          <button
+            onClick={handleImportClick}
+            disabled={importBusy}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gray-100 text-gray-800 font-semibold text-sm hover:bg-gray-200 active:scale-[0.98] transition-all mt-2 disabled:opacity-50 disabled:active:scale-100"
+          >
+            <span>⬆️</span>
+            {importBusy ? 'Importing…' : 'Import backup…'}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <p className="text-xs text-gray-500 mt-3">
+            Backups contain all day statuses plus your settings. Importing
+            replaces everything currently stored on this device.
+          </p>
+          {importError && (
+            <div className="mt-3 bg-red-50 border border-red-200 rounded-xl p-3">
+              <p className="text-sm text-red-700">
+                <span className="font-semibold">⚠️ Import failed.</span>{' '}
+                {importError}
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </div>
