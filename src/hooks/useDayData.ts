@@ -19,5 +19,22 @@ export function useDayData(year: number, month: number) {
     });
   };
 
-  return { data, setDayStatus };
+  const bulkSetStatus = (
+    dateKeys: string[],
+    status: DayStatus | 'none'
+  ) => {
+    setData((prev) => {
+      const next = { ...prev };
+      for (const dk of dateKeys) {
+        if (status === 'none') {
+          delete next[dk];
+        } else {
+          next[dk] = status;
+        }
+      }
+      return next;
+    });
+  };
+
+  return { data, setDayStatus, bulkSetStatus };
 }
