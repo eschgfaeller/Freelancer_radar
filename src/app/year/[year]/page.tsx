@@ -40,13 +40,11 @@ export default function YearPage() {
 
   const dailyNet = getDailyNet(settings);
 
-  // Per-month stats (reuses the same engine as the monthly view)
   const monthStats = useMemo(
     () => monthsData.map((data, m) => getMonthStats(year, m, data, settings)),
     [year, monthsData, settings]
   );
 
-  // Aggregated year totals
   const yr = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -77,7 +75,6 @@ export default function YearPage() {
       }
     });
 
-    // Available workdays in the full year and elapsed portion
     const swissHolidays = getSwissHolidays(year);
     let elapsedAvail = 0;
     let totalAvail = 0;
@@ -121,7 +118,6 @@ export default function YearPage() {
     };
   }, [monthStats, year, isCurrentYear, currentMonth, settings.dailyRate]);
 
-  // Bar chart normalization
   const maxBar = useMemo(
     () => Math.max(...monthStats.map((s) => s.expectedTotal), 1),
     [monthStats]
@@ -146,7 +142,7 @@ export default function YearPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 py-3 shadow-lg">
+      <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
         <div className="flex items-center gap-3 max-w-lg mx-auto">
           <Link
             href="/"
@@ -224,7 +220,6 @@ export default function YearPage() {
               Based on {yr.remaining} remaining workday{yr.remaining !== 1 ? 's' : ''} at{' '}
               {formatCHF(dailyNet)}/day
             </p>
-            {/* Year progress bar */}
             {isCurrentYear && (
               <div className="mt-4">
                 <div className="flex justify-between text-[11px] text-gray-400 mb-1">
@@ -355,7 +350,6 @@ export default function YearPage() {
                     {MONTHS[i]}
                   </span>
 
-                  {/* Stacked bar */}
                   <div className="flex-1 h-4 bg-gray-100 rounded overflow-hidden flex">
                     {actualPct > 0 && (
                       <div
@@ -390,7 +384,6 @@ export default function YearPage() {
             })}
           </div>
 
-          {/* Legend */}
           <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded bg-emerald-500" />
@@ -413,7 +406,6 @@ export default function YearPage() {
           </div>
 
           <div className="space-y-3">
-            {/* Average Monthly */}
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Avg. Monthly Net</span>
               <span className="text-sm font-bold text-gray-900">
@@ -422,7 +414,6 @@ export default function YearPage() {
             </div>
             <div className="border-t border-gray-50" />
 
-            {/* Best Month */}
             {yr.bestEarned > 0 && (
               <>
                 <div className="flex justify-between items-center">
@@ -435,7 +426,6 @@ export default function YearPage() {
               </>
             )}
 
-            {/* Gross Invoiced */}
             {yr.gross > 0 && (
               <>
                 <div className="flex justify-between items-center">
@@ -450,7 +440,6 @@ export default function YearPage() {
               </>
             )}
 
-            {/* Available Workdays */}
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">
                 Available Workdays
@@ -461,7 +450,6 @@ export default function YearPage() {
             </div>
             <div className="border-t border-gray-50" />
 
-            {/* Max Potential */}
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Max Year Potential</span>
               <span className="text-sm font-bold text-emerald-600">

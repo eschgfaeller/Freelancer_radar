@@ -6,7 +6,7 @@ export default function Header() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 py-3 shadow-lg">
+    <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
       <div className="flex items-center justify-between max-w-lg mx-auto">
         <div className="flex items-center gap-2">
           <span className="text-xl">📊</span>

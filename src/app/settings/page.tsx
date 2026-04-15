@@ -17,7 +17,7 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 py-3 shadow-lg">
+      <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
         <div className="flex items-center gap-3 max-w-lg mx-auto">
           <button
             onClick={() => router.back()}

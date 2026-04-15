@@ -12,8 +12,10 @@
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  .safe-top {
-    padding-top: env(safe-area-inset-top);
+  /* Adds safe-area inset ON TOP of the normal 0.75rem (py-3) header padding.
+     On non-PWA browsers env() resolves to 0px — so this is just 0.75rem. */
+  .pt-safe {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
   }
 }
 
