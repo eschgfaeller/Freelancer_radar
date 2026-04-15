@@ -15,6 +15,14 @@ interface CalendarProps {
 
 const WEEKDAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
+const LEGEND_ITEMS: { key: string; label: string; swatch: string }[] = [
+  { key: 'worked',   label: 'Worked',   swatch: 'bg-emerald-500' },
+  { key: 'sick',     label: 'Sick',     swatch: 'bg-red-500' },
+  { key: 'vacation', label: 'Vacation', swatch: 'bg-gray-300' },
+  { key: 'holiday',  label: 'Holiday',  swatch: 'bg-gray-300' },
+  { key: 'free',     label: 'Free',     swatch: 'bg-gray-200' },
+];
+
 export default function Calendar({
   year,
   month,
@@ -61,7 +69,7 @@ export default function Calendar({
           const weekend = isWeekend(day);
           const isHoliday = holidays.includes(key);
 
-          // Show holiday color if it's a weekday holiday without a manual status
+          // Auto-show holiday for weekday holidays without a manual status
           const displayStatus =
             status || (isHoliday && !weekend ? 'holiday' : undefined);
           const colors = displayStatus
@@ -73,26 +81,19 @@ export default function Calendar({
               key={key}
               onClick={() => onDayClick(key)}
               className={`
-                relative aspect-square flex flex-col items-center justify-center
-                rounded-xl text-sm font-medium transition-all active:scale-90
-                ${isToday ? 'ring-2 ring-emerald-500 ring-offset-1' : ''}
+                aspect-square flex items-center justify-center
+                rounded-xl text-sm font-semibold transition-all active:scale-90
+                ${isToday ? 'ring-2 ring-emerald-600 ring-offset-1' : ''}
                 ${
                   colors
                     ? `${colors.bg} ${colors.text}`
                     : weekend
-                      ? 'bg-gray-50/50 text-gray-400'
-                      : 'hover:bg-gray-50 text-gray-700'
+                      ? 'bg-gray-50 text-gray-300'
+                      : 'bg-white text-gray-800 hover:bg-gray-50'
                 }
               `}
             >
-              <span className={isToday ? 'font-bold' : ''}>
-                {day.getDate()}
-              </span>
-              {displayStatus && (
-                <div
-                  className={`w-1.5 h-1.5 rounded-full mt-0.5 ${colors?.dot}`}
-                />
-              )}
+              {day.getDate()}
             </button>
           );
         })}
@@ -100,12 +101,10 @@ export default function Calendar({
 
       {/* Legend */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 pt-3 border-t border-gray-100">
-        {Object.entries(STATUS_COLORS).map(([status, colors]) => (
-          <div key={status} className="flex items-center gap-1.5">
-            <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
-            <span className="text-[11px] text-gray-500 capitalize">
-              {status}
-            </span>
+        {LEGEND_ITEMS.map((item) => (
+          <div key={item.key} className="flex items-center gap-1.5">
+            <div className={`w-3 h-3 rounded ${item.swatch}`} />
+            <span className="text-[11px] text-gray-500">{item.label}</span>
           </div>
         ))}
       </div>

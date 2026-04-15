@@ -85,27 +85,6 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        {/* Working Days per Week */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm">
-          <label className="block text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">
-            Working Days per Week
-          </label>
-          <input
-            type="number"
-            value={settings.workingDaysPerWeek}
-            onChange={(e) =>
-              updateSetting(
-                'workingDaysPerWeek',
-                parseInt(e.target.value) || 0
-              )
-            }
-            className="w-full text-3xl font-bold text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
-            min={1}
-            max={7}
-            step={1}
-          />
-        </div>
-
         {/* Computed Daily Net */}
         <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-2">
