@@ -58,6 +58,7 @@ export default function YearPage() {
     let free = 0;
     let earned = 0;
     let expected = 0;
+    let remaining = 0;
     let bestIdx = 0;
     let bestEarned = 0;
 
@@ -69,6 +70,7 @@ export default function YearPage() {
       free += s.freeDays;
       earned += s.totalEarned;
       expected += s.expectedTotal;
+      remaining += s.remainingWorkdays;
       if (s.totalEarned > bestEarned) {
         bestEarned = s.totalEarned;
         bestIdx = i;
@@ -108,6 +110,7 @@ export default function YearPage() {
       free,
       earned,
       expected,
+      remaining,
       utilization,
       avgMonthly,
       gross,
@@ -218,10 +221,8 @@ export default function YearPage() {
               {formatCHF(yr.expected)}
             </p>
             <p className="text-sm text-gray-500 mt-1">
-              If you work all {yr.totalAvail - yr.elapsedAvail + (monthStats[currentMonth]?.remainingWorkdays || 0) > 0
-                ? `${yr.totalAvail - (yr.elapsedAvail - (isCurrentYear ? monthStats[currentMonth]?.remainingWorkdays || 0 : 0))} remaining`
-                : yr.totalAvail}{' '}
-              workdays at {formatCHF(dailyNet)}/day
+              Based on {yr.remaining} remaining workday{yr.remaining !== 1 ? 's' : ''} at{' '}
+              {formatCHF(dailyNet)}/day
             </p>
             {/* Year progress bar */}
             {isCurrentYear && (
