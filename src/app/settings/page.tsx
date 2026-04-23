@@ -6,13 +6,24 @@ import { formatCHF } from '@/lib/calculations';
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [settings, setSettings] = useSettings();
+  const { settings, loading, setSettings } = useSettings();
 
   const dailyNet = settings.dailyRate * settings.netRatio;
 
   const updateSetting = (key: keyof typeof settings, value: number) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto" />
+          <p className="text-sm text-gray-400 mt-3">Loading…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -108,7 +119,7 @@ export default function SettingsPage() {
             <span className="text-lg mt-0.5">ℹ️</span>
             <p className="text-sm text-blue-800">
               These settings affect all calculations across the app. Changes are
-              saved automatically to your device.
+              saved automatically to your account.
             </p>
           </div>
         </div>
