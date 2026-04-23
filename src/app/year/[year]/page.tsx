@@ -30,8 +30,10 @@ export default function YearPage() {
   const params = useParams();
   const year = parseInt(params.year as string) || new Date().getFullYear();
 
-  const [settings] = useSettings();
-  const monthsData = useYearData(year);
+  const { settings, loading: settingsLoading } = useSettings();
+  const { months: monthsData, loading: yearLoading } = useYearData(year);
+
+  const pageLoading = settingsLoading || yearLoading;
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
@@ -138,6 +140,17 @@ export default function YearPage() {
   const vacOver = vacUsed > VACATION_ALLOWANCE;
 
   const showForecast = isCurrentYear || isFuture;
+
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto" />
+          <p className="text-sm text-gray-400 mt-3">Loading…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">

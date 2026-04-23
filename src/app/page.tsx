@@ -23,8 +23,10 @@ export default function Home() {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [showBulk, setShowBulk] = useState(false);
 
-  const [settings] = useSettings();
-  const { data, setDayStatus, bulkSetStatus } = useDayData(year, month);
+  const { settings, loading: settingsLoading } = useSettings();
+  const { data, loading: dataLoading, setDayStatus, bulkSetStatus } = useDayData(year, month);
+
+  const loading = settingsLoading || dataLoading;
 
   const stats = useMemo(
     () => getMonthStats(year, month, data, settings),
@@ -43,6 +45,17 @@ export default function Home() {
   const handleBulkApply = (dateKeys: string[], status: DayStatus | 'none') => {
     bulkSetStatus(dateKeys, status);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto" />
+          <p className="text-sm text-gray-400 mt-3">Loading…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
