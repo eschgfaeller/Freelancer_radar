@@ -10,7 +10,13 @@ export async function GET(request: Request) {
     const supabase = createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      // On Vercel (and other reverse proxies) request.url origin can be an
+      // internal address. x-forwarded-host carries the real public domain.
+      const forwardedHost = request.headers.get('x-forwarded-host');
+      const redirectBase = forwardedHost
+        ? `https://${forwardedHost}`
+        : origin;
+      return NextResponse.redirect(`${redirectBase}${next}`);
     }
   }
 
