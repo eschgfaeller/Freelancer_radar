@@ -15,7 +15,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-blue-600 text-white px-4 pt-safe pb-3 shadow-lg">
+    <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
       <div className="flex items-center justify-between max-w-lg mx-auto">
         <div className="flex items-center gap-2">
           <span className="text-xl">📊</span>
@@ -24,7 +24,7 @@ export default function Header() {
         <div className="flex items-center gap-1">
           <Link
             href={`/year/${currentYear}`}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-500 active:bg-blue-700 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-emerald-500 active:bg-emerald-700 transition-colors"
             aria-label="Year Summary"
           >
             <svg
@@ -40,7 +40,7 @@ export default function Header() {
           </Link>
           <Link
             href="/settings"
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-500 active:bg-blue-700 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-emerald-500 active:bg-emerald-700 transition-colors"
             aria-label="Settings"
           >
             <svg
@@ -65,7 +65,7 @@ export default function Header() {
           </Link>
           <button
             onClick={handleLogout}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-500 active:bg-blue-700 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-emerald-500 active:bg-emerald-700 transition-colors"
             aria-label="Sign out"
           >
             <svg

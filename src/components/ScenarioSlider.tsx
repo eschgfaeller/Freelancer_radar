@@ -57,7 +57,7 @@ export default function ScenarioSlider({
         <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
           Scenario Earnings
         </p>
-        <p className="text-2xl font-bold text-blue-600 mt-1">
+        <p className="text-2xl font-bold text-emerald-600 mt-1">
           {formatCHF(scenarioEarnings)}
         </p>
         {daysOff > 0 && (

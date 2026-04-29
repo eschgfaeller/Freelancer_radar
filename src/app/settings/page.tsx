@@ -18,7 +18,7 @@ export default function SettingsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
+          <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto" />
           <p className="text-sm text-gray-400 mt-3">Loading…</p>
         </div>
       </div>
@@ -28,11 +28,11 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-blue-600 text-white px-4 pt-safe pb-3 shadow-lg">
+      <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
         <div className="flex items-center gap-3 max-w-lg mx-auto">
           <button
             onClick={() => router.back()}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-500 active:bg-blue-700 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-emerald-500 active:bg-emerald-700 transition-colors"
             aria-label="Go back"
           >
             <svg
@@ -65,7 +65,7 @@ export default function SettingsPage() {
             onChange={(e) =>
               updateSetting('dailyRate', parseFloat(e.target.value) || 0)
             }
-            className="w-full text-3xl font-bold text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+            className="w-full text-3xl font-bold text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
             min={0}
             step={50}
           />
@@ -85,7 +85,7 @@ export default function SettingsPage() {
                 (parseFloat(e.target.value) || 0) / 100
               )
             }
-            className="w-full text-3xl font-bold text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+            className="w-full text-3xl font-bold text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
             min={0}
             max={100}
             step={1}
@@ -97,27 +97,27 @@ export default function SettingsPage() {
         </div>
 
         {/* Computed Daily Net */}
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-xl">💰</span>
-            <p className="text-sm font-semibold text-blue-800 uppercase tracking-wider">
+            <p className="text-sm font-semibold text-emerald-800 uppercase tracking-wider">
               Your Daily Net
             </p>
           </div>
-          <p className="text-3xl font-bold text-blue-700">
+          <p className="text-3xl font-bold text-emerald-700">
             {formatCHF(dailyNet)}
           </p>
-          <p className="text-sm text-blue-600 mt-1">
+          <p className="text-sm text-emerald-600 mt-1">
             {formatCHF(settings.dailyRate)} ×{' '}
             {Math.round(settings.netRatio * 100)}% = {formatCHF(dailyNet)}
           </p>
         </div>
 
         {/* Info Box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
           <div className="flex items-start gap-3">
             <span className="text-lg mt-0.5">ℹ️</span>
-            <p className="text-sm text-blue-800">
+            <p className="text-sm text-emerald-800">
               These settings affect all calculations across the app. Changes are
               saved automatically to your account.
             </p>

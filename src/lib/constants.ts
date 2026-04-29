@@ -6,7 +6,7 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 export const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  worked:   { bg: 'bg-blue-500', text: 'text-white' },
+  worked:   { bg: 'bg-emerald-500', text: 'text-white' },
   sick:     { bg: 'bg-red-500',     text: 'text-white' },
   vacation: { bg: 'bg-gray-300',    text: 'text-gray-700' },
   holiday:  { bg: 'bg-gray-300',    text: 'text-gray-700' },

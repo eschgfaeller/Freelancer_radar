@@ -50,7 +50,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
+          <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto" />
           <p className="text-sm text-gray-400 mt-3">Loading…</p>
         </div>
       </div>
@@ -90,7 +90,7 @@ export default function Home() {
           {/* Bulk Change trigger */}
           <button
             onClick={() => setShowBulk(true)}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-gray-300 text-gray-500 font-medium text-sm hover:border-blue-400 hover:text-blue-600 active:scale-[0.98] transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-gray-300 text-gray-500 font-medium text-sm hover:border-emerald-400 hover:text-emerald-600 active:scale-[0.98] transition-all"
           >
             <svg
               className="w-4 h-4"

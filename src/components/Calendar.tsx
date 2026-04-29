@@ -16,7 +16,7 @@ interface CalendarProps {
 const WEEKDAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
 const LEGEND_ITEMS: { key: string; label: string; swatch: string }[] = [
-  { key: 'worked',   label: 'Worked',   swatch: 'bg-blue-500' },
+  { key: 'worked',   label: 'Worked',   swatch: 'bg-emerald-500' },
   { key: 'sick',     label: 'Sick',     swatch: 'bg-red-500' },
   { key: 'vacation', label: 'Vacation', swatch: 'bg-gray-300' },
   { key: 'holiday',  label: 'Holiday',  swatch: 'bg-gray-300' },
@@ -83,7 +83,7 @@ export default function Calendar({
               className={`
                 aspect-square flex items-center justify-center
                 rounded-xl text-sm font-semibold transition-all active:scale-90
-                ${isToday ? 'ring-2 ring-blue-600 ring-offset-1' : ''}
+                ${isToday ? 'ring-2 ring-emerald-600 ring-offset-1' : ''}
                 ${
                   colors
                     ? `${colors.bg} ${colors.text}`

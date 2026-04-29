@@ -51,7 +51,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl text-white">$</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">
@@ -63,19 +63,19 @@ export default function LoginPage() {
         </div>
 
         {sent ? (
-          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center">
             <span className="text-3xl mb-3 block">📧</span>
-            <h2 className="text-lg font-bold text-blue-800 mb-1">
+            <h2 className="text-lg font-bold text-emerald-800 mb-1">
               Check your email
             </h2>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-emerald-700">
               We sent a magic link to{' '}
               <span className="font-semibold">{email}</span>. Click it to sign
               in.
             </p>
             <button
               onClick={() => setSent(false)}
-              className="mt-4 text-sm text-blue-600 font-medium underline"
+              className="mt-4 text-sm text-emerald-600 font-medium underline"
             >
               Use a different email
             </button>
@@ -132,7 +132,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full text-lg text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+                  className="w-full text-lg text-gray-900 bg-gray-50 rounded-xl px-4 py-3 border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
                 />
               </div>
 
@@ -145,7 +145,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || googleLoading || !email}
-                className="w-full py-3 rounded-2xl bg-blue-600 text-white font-semibold text-base hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100"
+                className="w-full py-3 rounded-2xl bg-emerald-600 text-white font-semibold text-base hover:bg-emerald-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100"
               >
                 {loading ? 'Sending…' : 'Send magic link'}
               </button>
