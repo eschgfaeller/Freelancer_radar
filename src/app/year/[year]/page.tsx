@@ -145,7 +145,7 @@ export default function YearPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto" />
+          <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
           <p className="text-sm text-gray-400 mt-3">Loading…</p>
         </div>
       </div>
@@ -155,11 +155,11 @@ export default function YearPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
+      <header className="sticky top-0 z-30 bg-blue-600 text-white px-4 pt-safe pb-3 shadow-lg">
         <div className="flex items-center gap-3 max-w-lg mx-auto">
           <Link
             href="/"
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-emerald-500 active:bg-emerald-700 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-500 active:bg-blue-700 transition-colors"
             aria-label="Back to dashboard"
           >
             <svg
@@ -226,7 +226,7 @@ export default function YearPage() {
                 Expected Year Total
               </h3>
             </div>
-            <p className="text-3xl font-bold text-emerald-600">
+            <p className="text-3xl font-bold text-blue-600">
               {formatCHF(yr.expected)}
             </p>
             <p className="text-sm text-gray-500 mt-1">
@@ -242,7 +242,7 @@ export default function YearPage() {
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-emerald-500 rounded-full transition-all"
+                    className="h-full bg-blue-500 rounded-full transition-all"
                     style={{ width: `${Math.min(100, (yr.earned / yr.expected) * 100)}%` }}
                   />
                 </div>
@@ -290,7 +290,7 @@ export default function YearPage() {
         {/* ── Year Stats ── */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { icon: '💼', value: yr.worked, label: 'Worked', color: 'text-emerald-600' },
+            { icon: '💼', value: yr.worked, label: 'Worked', color: 'text-blue-600' },
             { icon: '🏖️', value: yr.vacation, label: 'Vacation', color: 'text-blue-600' },
             { icon: '🤒', value: yr.sick, label: 'Sick', color: 'text-red-600' },
           ].map((s) => (
@@ -313,7 +313,7 @@ export default function YearPage() {
               icon: '📈',
               value: `${Math.round(yr.utilization)}%`,
               label: 'Utilization',
-              color: yr.utilization >= 80 ? 'text-emerald-600' : yr.utilization >= 50 ? 'text-amber-600' : 'text-red-600',
+              color: yr.utilization >= 80 ? 'text-blue-600' : yr.utilization >= 50 ? 'text-amber-600' : 'text-red-600',
             },
           ].map((s) => (
             <div
@@ -355,7 +355,7 @@ export default function YearPage() {
                   key={i}
                   className={`flex items-center gap-2 py-1.5 px-2 rounded-lg transition-colors ${
                     isThisMonth
-                      ? 'bg-emerald-50 ring-1 ring-emerald-200'
+                      ? 'bg-blue-50 ring-1 ring-blue-200'
                       : ''
                   }`}
                 >
@@ -366,13 +366,13 @@ export default function YearPage() {
                   <div className="flex-1 h-4 bg-gray-100 rounded overflow-hidden flex">
                     {actualPct > 0 && (
                       <div
-                        className="h-full bg-emerald-500"
+                        className="h-full bg-blue-500"
                         style={{ width: `${actualPct}%` }}
                       />
                     )}
                     {forecastPct > 0 && (
                       <div
-                        className="h-full bg-emerald-200"
+                        className="h-full bg-blue-200"
                         style={{ width: `${forecastPct}%` }}
                       />
                     )}
@@ -399,11 +399,11 @@ export default function YearPage() {
 
           <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded bg-emerald-500" />
+              <div className="w-3 h-3 rounded bg-blue-500" />
               <span className="text-[11px] text-gray-500">Actual</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded bg-emerald-200" />
+              <div className="w-3 h-3 rounded bg-blue-200" />
               <span className="text-[11px] text-gray-500">Forecast</span>
             </div>
           </div>
@@ -465,7 +465,7 @@ export default function YearPage() {
 
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Max Year Potential</span>
-              <span className="text-sm font-bold text-emerald-600">
+              <span className="text-sm font-bold text-blue-600">
                 {formatCHF(yr.totalAvail * dailyNet)}
               </span>
             </div>

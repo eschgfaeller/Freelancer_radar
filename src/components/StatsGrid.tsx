@@ -9,7 +9,7 @@ interface StatsGridProps {
 }
 
 const STAT_CONFIG = [
-  { key: 'worked', icon: '💼', label: 'Worked', color: 'text-emerald-600' },
+  { key: 'worked', icon: '💼', label: 'Worked', color: 'text-blue-600' },
   { key: 'vacation', icon: '🏖️', label: 'Vacation', color: 'text-blue-600' },
   { key: 'sick', icon: '🤒', label: 'Sick', color: 'text-red-600' },
   { key: 'holiday', icon: '🎉', label: 'Holidays', color: 'text-purple-600' },

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
           justifyContent: 'center',
           width: '100%',
           height: '100%',
-          backgroundColor: '#059669',
+          backgroundColor: '#2563eb',
           borderRadius: size * 0.2,
           fontSize: size * 0.35,
           fontWeight: 700,

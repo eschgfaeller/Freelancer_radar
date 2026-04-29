@@ -21,7 +21,7 @@ export default function ForecastCard({
           Expected This Month
         </h3>
       </div>
-      <p className="text-3xl font-bold text-emerald-600">
+      <p className="text-3xl font-bold text-blue-600">
         {formatCHF(expectedTotal)}
       </p>
       <p className="text-sm text-gray-500 mt-1">

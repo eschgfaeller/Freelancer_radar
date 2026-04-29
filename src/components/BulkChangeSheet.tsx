@@ -100,7 +100,7 @@ export default function BulkChangeSheet({
                 active:scale-95 text-sm font-medium
                 ${
                   action === a.value
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                    ? 'border-blue-500 bg-blue-50 text-blue-800'
                     : a.value === 'none'
                       ? 'border-red-200 text-red-600 hover:border-red-300'
                       : 'border-gray-200 text-gray-700 hover:border-gray-300'
@@ -124,7 +124,7 @@ export default function BulkChangeSheet({
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-900 font-medium text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+              className="w-full px-3 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-900 font-medium text-sm focus:border-blue-500 focus:outline-none transition-colors"
             />
           </div>
           <div className="flex-1">
@@ -133,7 +133,7 @@ export default function BulkChangeSheet({
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-900 font-medium text-sm focus:border-emerald-500 focus:outline-none transition-colors"
+              className="w-full px-3 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-900 font-medium text-sm focus:border-blue-500 focus:outline-none transition-colors"
             />
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function BulkChangeSheet({
           <div
             className={`
               w-10 h-6 rounded-full transition-colors relative
-              ${skipWeekends ? 'bg-emerald-500' : 'bg-gray-300'}
+              ${skipWeekends ? 'bg-blue-500' : 'bg-gray-300'}
             `}
           >
             <div
@@ -195,7 +195,7 @@ export default function BulkChangeSheet({
           className={`
             w-full py-3.5 rounded-2xl font-bold text-base transition-all
             ${action !== null && affectedKeys.length > 0
-              ? 'bg-emerald-600 text-white active:scale-[0.98] hover:bg-emerald-700'
+              ? 'bg-blue-600 text-white active:scale-[0.98] hover:bg-blue-700'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }
           `}
