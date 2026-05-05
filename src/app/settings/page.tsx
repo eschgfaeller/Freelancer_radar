@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSettings } from '@/hooks/useSettings';
 import { formatCHF } from '@/lib/calculations';
@@ -7,11 +8,17 @@ import { formatCHF } from '@/lib/calculations';
 export default function SettingsPage() {
   const router = useRouter();
   const { settings, loading, setSettings } = useSettings();
+  const [showSaved, setShowSaved] = useState(false);
+  const savedTimeout = useRef<ReturnType<typeof setTimeout>>(null);
 
   const dailyNet = settings.dailyRate * settings.netRatio;
 
   const updateSetting = (key: keyof typeof settings, value: number) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
+    // Show "Saved" indicator briefly
+    setShowSaved(true);
+    if (savedTimeout.current) clearTimeout(savedTimeout.current);
+    savedTimeout.current = setTimeout(() => setShowSaved(false), 2000);
   };
 
   if (loading) {
@@ -50,6 +57,14 @@ export default function SettingsPage() {
             </svg>
           </button>
           <h1 className="text-lg font-bold">Settings</h1>
+          {/* Saved indicator */}
+          <div
+            className={`ml-auto text-xs font-medium bg-white/20 px-2.5 py-1 rounded-full transition-all duration-300 ${
+              showSaved ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
+            }`}
+          >
+            ✓ Saved
+          </div>
         </div>
       </header>
 
