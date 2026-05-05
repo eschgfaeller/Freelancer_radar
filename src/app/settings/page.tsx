@@ -9,7 +9,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const { settings, loading, setSettings } = useSettings();
   const [showSaved, setShowSaved] = useState(false);
-  const savedTimeout = useRef<ReturnType<typeof setTimeout>>(null);
+  const savedTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const dailyNet = settings.dailyRate * settings.netRatio;
 
