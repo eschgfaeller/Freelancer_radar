@@ -6,12 +6,16 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/components/AuthProvider';
 
 export function useDayData(year: number, month: number) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [data, setData] = useState<MonthData>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (authLoading) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
     const mm = String(month + 1).padStart(2, '0');
@@ -33,7 +37,7 @@ export function useDayData(year: number, month: number) {
         setData(result);
         setLoading(false);
       });
-  }, [user, year, month]);
+  }, [user, authLoading, year, month]);
 
   const setDayStatus = useCallback(
     (dateKey: string, status: DayStatus | 'none') => {

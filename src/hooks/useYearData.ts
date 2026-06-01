@@ -9,14 +9,18 @@ export function useYearData(year: number): {
   months: MonthData[];
   loading: boolean;
 } {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [months, setMonths] = useState<MonthData[]>(() =>
     Array.from({ length: 12 }, () => ({}))
   );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (authLoading) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
     const start = `${year}-01-01`;
@@ -37,7 +41,7 @@ export function useYearData(year: number): {
         setMonths(result);
         setLoading(false);
       });
-  }, [user, year]);
+  }, [user, authLoading, year]);
 
   return { months, loading };
 }

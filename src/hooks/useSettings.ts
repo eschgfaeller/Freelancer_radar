@@ -11,12 +11,16 @@ export function useSettings(): {
   loading: boolean;
   setSettings: (value: Settings | ((prev: Settings) => Settings)) => void;
 } {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [settings, setLocal] = useState<Settings>(DEFAULT_SETTINGS);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (authLoading) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
     setLoading(true);
@@ -34,7 +38,7 @@ export function useSettings(): {
         }
         setLoading(false);
       });
-  }, [user]);
+  }, [user, authLoading]);
 
   const setSettings = useCallback(
     (value: Settings | ((prev: Settings) => Settings)) => {
