@@ -32,13 +32,15 @@ export function useYearData(year: number): {
       .select('date, status')
       .gte('date', start)
       .lte('date', end)
-      .then(({ data: rows }) => {
-        const result: MonthData[] = Array.from({ length: 12 }, () => ({}));
-        rows?.forEach((r) => {
-          const m = parseInt(r.date.split('-')[1], 10) - 1;
-          result[m][r.date] = r.status as DayStatus;
-        });
-        setMonths(result);
+      .then(({ data: rows, error }) => {
+        if (!error) {
+          const result: MonthData[] = Array.from({ length: 12 }, () => ({}));
+          rows?.forEach((r) => {
+            const m = parseInt(r.date.split('-')[1], 10) - 1;
+            result[m][r.date] = r.status as DayStatus;
+          });
+          setMonths(result);
+        }
         setLoading(false);
       });
   }, [user, authLoading, year]);

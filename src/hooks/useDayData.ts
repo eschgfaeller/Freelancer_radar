@@ -29,12 +29,14 @@ export function useDayData(year: number, month: number) {
       .select('date, status')
       .gte('date', start)
       .lte('date', end)
-      .then(({ data: rows }) => {
-        const result: MonthData = {};
-        rows?.forEach((r) => {
-          result[r.date] = r.status as DayStatus;
-        });
-        setData(result);
+      .then(({ data: rows, error }) => {
+        if (!error) {
+          const result: MonthData = {};
+          rows?.forEach((r) => {
+            result[r.date] = r.status as DayStatus;
+          });
+          setData(result);
+        }
         setLoading(false);
       });
   }, [user, authLoading, year, month]);

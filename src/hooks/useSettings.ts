@@ -29,8 +29,8 @@ export function useSettings(): {
       .select('daily_rate, net_ratio')
       .eq('user_id', user.id)
       .maybeSingle()
-      .then(({ data: row }) => {
-        if (row) {
+      .then(({ data: row, error }) => {
+        if (!error && row) {
           setLocal({
             dailyRate: Number(row.daily_rate),
             netRatio: Number(row.net_ratio),
