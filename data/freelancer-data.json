@@ -3,5 +3,7 @@
     "dailyRate": 1100,
     "netRatio": 0.65
   },
-  "days": {}
+  "days": {
+    "2026-08-03": "worked"
+  }
 }
