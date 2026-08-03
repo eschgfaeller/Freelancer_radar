@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import { AuthProvider } from '@/components/AuthProvider';
+import { DataProvider } from '@/components/DataProvider';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <DataProvider>{children}</DataProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `

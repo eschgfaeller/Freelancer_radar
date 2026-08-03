@@ -1,18 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 
 export default function Header() {
   const currentYear = new Date().getFullYear();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push('/login');
-  };
 
   return (
     <header className="sticky top-0 z-30 bg-emerald-600 text-white px-4 pt-safe pb-3 shadow-lg">
@@ -63,8 +54,8 @@ export default function Header() {
               />
             </svg>
           </Link>
-          <button
-            onClick={handleLogout}
+          <a
+            href="/api/logout"
             className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-emerald-500 active:bg-emerald-700 transition-colors"
             aria-label="Sign out"
           >
@@ -81,7 +72,7 @@ export default function Header() {
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
               />
             </svg>
-          </button>
+          </a>
         </div>
       </div>
     </header>
