@@ -11,11 +11,15 @@ import {
 import { DayStatus, Settings, StoreData } from '@/lib/types';
 import { DEFAULT_SETTINGS } from '@/lib/constants';
 
+export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
 interface DataContextValue {
   settings: Settings;
   days: Record<string, DayStatus>;
   loading: boolean;
-  saving: boolean;
+  dirty: boolean;
+  saveStatus: SaveStatus;
+  save: () => Promise<void>;
   setSettings: (updater: Settings | ((prev: Settings) => Settings)) => void;
   setDayStatus: (dateKey: string, status: DayStatus | 'none') => void;
   bulkSetStatus: (dateKeys: string[], status: DayStatus | 'none') => void;
@@ -23,28 +27,58 @@ interface DataContextValue {
 
 const DataContext = createContext<DataContextValue | null>(null);
 
-const PERSIST_DEBOUNCE_MS = 800;
+// Unsaved edits are kept here so closing the app never loses them.
+const DRAFT_KEY = 'freelancer-radar-draft-v1';
+
+function readDraft(): StoreData | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as StoreData) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeDraft(data: StoreData | null) {
+  try {
+    if (data) localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // Storage can be unavailable (private mode); saving still works.
+  }
+}
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettingsState] = useState<Settings>(DEFAULT_SETTINGS);
   const [days, setDaysState] = useState<Record<string, DayStatus>>({});
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
 
-  const persistTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestRef = useRef<StoreData>({ settings: DEFAULT_SETTINGS, days: {} });
+  const versionRef = useRef(0);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     if (window.location.pathname.startsWith('/login')) {
       setLoading(false);
       return;
     }
-    fetch('/api/data')
-      .then((res) => res.json())
-      .then((data: StoreData) => {
+    fetch('/api/data', { cache: 'no-store' })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Load failed: ${res.status}`);
+        return res.json();
+      })
+      .then((server: StoreData) => {
+        const draft = readDraft();
+        const data = draft ?? server;
         setSettingsState(data.settings);
         setDaysState(data.days);
         latestRef.current = data;
+        if (draft) {
+          versionRef.current += 1;
+          setDirty(true);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -53,76 +87,82 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       });
   }, []);
 
-  const flush = useCallback(() => {
-    if (persistTimeout.current) {
-      clearTimeout(persistTimeout.current);
-      persistTimeout.current = null;
-    }
-    setSaving(true);
-    fetch('/api/data', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(latestRef.current),
-      keepalive: true,
-    })
-      .catch((err) => console.error('Failed to persist data', err))
-      .finally(() => setSaving(false));
+  const markEdited = useCallback((next: StoreData) => {
+    latestRef.current = next;
+    versionRef.current += 1;
+    writeDraft(next);
+    setDirty(true);
+    setSaveStatus('idle');
   }, []);
 
-  const schedulePersist = useCallback(() => {
-    if (persistTimeout.current) clearTimeout(persistTimeout.current);
-    persistTimeout.current = setTimeout(flush, PERSIST_DEBOUNCE_MS);
-  }, [flush]);
+  const save = useCallback(async () => {
+    if (savingRef.current) return;
+    savingRef.current = true;
+    const version = versionRef.current;
+    setSaveStatus('saving');
+    try {
+      const res = await fetch('/api/data', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(latestRef.current),
+      });
+      if (!res.ok) throw new Error(`Save failed: ${res.status}`);
+      // Only clear the draft if nothing changed while the request was in flight.
+      if (version === versionRef.current) {
+        writeDraft(null);
+        setDirty(false);
+      }
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus((s) => (s === 'saved' ? 'idle' : s)), 2000);
+    } catch (err) {
+      console.error('Failed to persist data', err);
+      setSaveStatus('error');
+    } finally {
+      savingRef.current = false;
+    }
+  }, []);
 
-  // Best-effort flush of any pending debounced write before the tab closes.
+  // Warn before leaving the page with unsaved changes.
   useEffect(() => {
-    const handlePageHide = () => {
-      if (persistTimeout.current) flush();
+    if (!dirty) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
     };
-    window.addEventListener('pagehide', handlePageHide);
-    return () => window.removeEventListener('pagehide', handlePageHide);
-  }, [flush]);
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [dirty]);
 
   const setSettings = useCallback(
     (updater: Settings | ((prev: Settings) => Settings)) => {
-      setSettingsState((prev) => {
-        const next = updater instanceof Function ? updater(prev) : updater;
-        latestRef.current = { ...latestRef.current, settings: next };
-        schedulePersist();
-        return next;
-      });
+      const next = updater instanceof Function ? updater(latestRef.current.settings) : updater;
+      setSettingsState(next);
+      markEdited({ ...latestRef.current, settings: next });
     },
-    [schedulePersist]
+    [markEdited]
+  );
+
+  const applyDays = useCallback(
+    (dateKeys: string[], status: DayStatus | 'none') => {
+      const next = { ...latestRef.current.days };
+      for (const dk of dateKeys) {
+        if (status === 'none') delete next[dk];
+        else next[dk] = status;
+      }
+      setDaysState(next);
+      markEdited({ ...latestRef.current, days: next });
+    },
+    [markEdited]
   );
 
   const setDayStatus = useCallback(
-    (dateKey: string, status: DayStatus | 'none') => {
-      setDaysState((prev) => {
-        const next = { ...prev };
-        if (status === 'none') delete next[dateKey];
-        else next[dateKey] = status;
-        latestRef.current = { ...latestRef.current, days: next };
-        schedulePersist();
-        return next;
-      });
-    },
-    [schedulePersist]
+    (dateKey: string, status: DayStatus | 'none') => applyDays([dateKey], status),
+    [applyDays]
   );
 
   const bulkSetStatus = useCallback(
-    (dateKeys: string[], status: DayStatus | 'none') => {
-      setDaysState((prev) => {
-        const next = { ...prev };
-        for (const dk of dateKeys) {
-          if (status === 'none') delete next[dk];
-          else next[dk] = status;
-        }
-        latestRef.current = { ...latestRef.current, days: next };
-        schedulePersist();
-        return next;
-      });
-    },
-    [schedulePersist]
+    (dateKeys: string[], status: DayStatus | 'none') => applyDays(dateKeys, status),
+    [applyDays]
   );
 
   return (
@@ -131,7 +171,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         settings,
         days,
         loading,
-        saving,
+        dirty,
+        saveStatus,
+        save,
         setSettings,
         setDayStatus,
         bulkSetStatus,

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'freelancer-radar-v1';
+const CACHE_NAME = 'freelancer-radar-v2';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -24,6 +24,9 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
+  // Never serve user data from cache: stale data hides saved changes.
+  if (new URL(event.request.url).pathname.startsWith('/api/')) return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
